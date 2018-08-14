@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_marginTop="25dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/item_zxing"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/a_s"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/item_bg">
+
+        <ImageView
+            android:id="@+id/item_ss"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:src="@drawable/a_4"/>
+
+        <EditText
+            android:id="@+id/item_ed"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:hint="请输入"/>
+
+        <ImageView
+            android:id="@+id/item_close"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:src="@drawable/a_3"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_xx"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/a9x"/>
+</LinearLayout>
