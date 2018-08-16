@@ -28,17 +28,19 @@ import java.util.List;
  * Created by admin on 2018-8-7.
  */
 
-public class Fragment_Car extends BaseFragment implements Iview_car {
+public class Fragment_Car extends BaseFragment implements Iview_car, View.OnClickListener {
 
     private ExpandableListView car_expanable;
     private CheckBox car_check;
     private TextView car_sum;
-    private Button car_btn;
+    private TextView car_btn;
     private List<CarBean.DataBean> mData;
+    private int b;
+    private ExpandableAdpter expandableAdpter;
 
     @Override
     protected void initListener() {
-
+        car_check.setOnClickListener(this);
     }
 
     @Override
@@ -69,11 +71,38 @@ public class Fragment_Car extends BaseFragment implements Iview_car {
     @Override
     public void modelSuccess(CarBean carBean) {
         mData = carBean.getData();
-        ExpandableAdpter expandableAdpter = new ExpandableAdpter(getActivity(), mData);
+        expandableAdpter = new ExpandableAdpter(getActivity(), mData, new ExpandableAdpter.Callback() {
+            @Override
+            public void json(int price, int number) {
+                car_sum.setText("合计:"+price);
+                car_btn.setText("结算("+number+")");
+            }
+        });
         car_expanable.setAdapter(expandableAdpter);
         int count = car_expanable.getCount();
         for (int i = 0; i < count; i++) {
             car_expanable.expandGroup(i);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.car_check:
+                boolean checked = car_check.isChecked();
+                if (checked){
+                    b=1;
+                }else{
+                    b=0;
+                }
+                for (int i = 0; i < mData.size(); i++) {
+                    List<CarBean.DataBean.ListBean> list = mData.get(i).getList();
+                    for (int j = 0; j < list.size(); j++) {
+                        list.get(j).setSelected(b);
+                    }
+                    expandableAdpter.notifyDataSetChanged();
+                }
+                break;
         }
     }
 }

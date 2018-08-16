@@ -93,24 +93,24 @@ public class CarBean {
 
              */
 
-            private String bargainPrice;
+            private double bargainPrice;
             private String createtime;
             private String detailUrl;
             private String images;
-            private String num;
+            private double num;
             private String pid;
             private String price;
             private String pscid;
-            private String selected;
+            private int selected;
             private String sellerid;
             private String subhead;
             private String title;
 
-            public String getBargainPrice() {
+            public double getBargainPrice() {
                 return bargainPrice;
             }
 
-            public void setBargainPrice(String bargainPrice) {
+            public void setBargainPrice(double bargainPrice) {
                 this.bargainPrice = bargainPrice;
             }
 
@@ -138,11 +138,11 @@ public class CarBean {
                 this.images = images;
             }
 
-            public String getNum() {
+            public double getNum() {
                 return num;
             }
 
-            public void setNum(String num) {
+            public void setNum(double num) {
                 this.num = num;
             }
 
@@ -170,11 +170,12 @@ public class CarBean {
                 this.pscid = pscid;
             }
 
-            public String getSelected() {
+            public int getSelected() {
+
                 return selected;
             }
 
-            public void setSelected(String selected) {
+            public void setSelected(int selected) {
                 this.selected = selected;
             }
 
