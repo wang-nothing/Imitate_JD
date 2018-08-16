@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mjd.imitate_jd">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".utils.MyApp"
         android:allowBackup="true"
@@ -17,9 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ShowActivity"></activity>
-        <activity android:name=".mvp.my.login.view.LoginActivity"></activity>
-        <activity android:name=".mvp.my.reg.view.RegActivity"></activity>
+        <activity android:name=".activity.ShowActivity" />
+        <activity android:name=".mvp.my.login.view.LoginActivity" />
+        <activity android:name=".mvp.my.reg.view.RegActivity" />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.DetailsActivity"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>

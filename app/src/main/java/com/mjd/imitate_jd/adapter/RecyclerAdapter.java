@@ -2,6 +2,7 @@ package com.mjd.imitate_jd.adapter;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +17,14 @@ import com.mjd.imitate_jd.R;
 import com.mjd.imitate_jd.bean.HomeBean;
 import com.mjd.imitate_jd.holder.BannerHolder;
 import com.mjd.imitate_jd.holder.ClassHolder;
+import com.mjd.imitate_jd.holder.MiaoShaHolder;
+import com.mjd.imitate_jd.holder.TuijianHolder;
 import com.stx.xhb.xbanner.XBanner;
 import com.stx.xhb.xbanner.transformers.Transformer;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +65,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         }else if (viewType == TWO_CLASS){
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_home_class, null);
             return new ClassHolder(view);
+        }else if (viewType == THREE){
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_home_miaosha, null);
+            return new MiaoShaHolder(view);
+        }else if (viewType == FOUR){
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_home_tuijian, null);
+            return new TuijianHolder(view);
         }
         return null;
     }
@@ -65,27 +78,41 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BannerHolder){
+
             mImages = new ArrayList<>();
             mImages.add(mData.getBanner().get(0).getIcon());
             mImages.add(mData.getBanner().get(1).getIcon());
             mImages.add(mData.getBanner().get(2).getIcon());
             mImages.add(mData.getBanner().get(3).getIcon());
-
             mText = new ArrayList<>();
             mText.add(mData.getBanner().get(0).getTitle());
             mText.add(mData.getBanner().get(1).getTitle());
             mText.add(mData.getBanner().get(2).getTitle());
             mText.add(mData.getBanner().get(3).getTitle());
-            XBanner item_home_xbanner = ((BannerHolder) holder).item_home_xbanner;
-            item_home_xbanner.setData(mImages, mText);
-            item_home_xbanner.setmAdapter(new XBanner.XBannerAdapter() {
-                @Override
-                public void loadBanner(XBanner banner, View view, int position) {
-                    Glide.with(mContext).load(mImages.get(position)).into((ImageView) view);
-                }
-            });
-            item_home_xbanner.setPageTransformer(Transformer.Default);
-            item_home_xbanner.setPageChangeDuration(1000);
+            /*for (int i = 0; i < mData.getBanner().size(); i++) {
+                mImages.add(mData.getBanner().get(position).getIcon());
+                mText.add(mData.getBanner().get(position).getTitle());
+            }*/
+            Banner item_home_xbanner = ((BannerHolder) holder).item_home_xbanner;
+            item_home_xbanner.setImageLoader(new MyLoader());
+            item_home_xbanner.setImages(mImages);
+            //设置轮播图的标题集合
+            item_home_xbanner.setBannerTitles(mText);
+            item_home_xbanner.setDelayTime(3000);
+            //设置是否为自动轮播，默认是“是”。
+            item_home_xbanner.isAutoPlay(true);
+            //设置指示器的位置，小点点，左中右。
+            item_home_xbanner.setIndicatorGravity(BannerConfig.CENTER)
+                    //以上内容都可写成链式布局，这是轮播图的监听。比较重要。方法在下面。
+                    .setOnBannerListener(new OnBannerListener() {
+                        @Override
+                        public void OnBannerClick(int position) {
+                            Log.i("tag", "你点了第"+position+"张轮播图");
+                        }
+                    })
+                    //必须最后调用的方法，启动轮播图。
+                    .start();
+
         }else if (holder instanceof ClassHolder){
 
 
@@ -143,13 +170,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
 
                 }
             });
+        }else if (holder instanceof MiaoShaHolder){
+            ((MiaoShaHolder) holder).miaosha_recyclerview.setLayoutManager(new GridLayoutManager(mContext,2));
+            HomeBean.DataBean.MiaoshaBean miaosha = mData.getMiaosha();
+            GridcycAdapter gridcycAdapter = new GridcycAdapter(miaosha, mContext);
+            ((MiaoShaHolder) holder).miaosha_recyclerview.setAdapter(gridcycAdapter);
+            ((MiaoShaHolder) holder).miaosha_tv.setText("————————"+mData.getMiaosha().getName()+"————————");
         }
+        else if (holder instanceof TuijianHolder){
+            ((TuijianHolder) holder).tuijian_tv.setText("————————"+mData.getTuijian().getName()+"————————");
+            ((TuijianHolder) holder).tuijian_recyclerview.setLayoutManager(new GridLayoutManager(mContext,2));
+            HomeBean.DataBean.TuijianBean tuijian = mData.getTuijian();
+            TuijiancAdapter tuijiancAdapter = new TuijiancAdapter(tuijian, mContext);
+            ((TuijianHolder) holder).tuijian_recyclerview.setAdapter(tuijiancAdapter);
 
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 4;
     }
 
     @Override
@@ -158,7 +198,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             return ONE_BANNER;
         }else if (position == 1){
             return TWO_CLASS;
+        }else if (position == 2){
+            return THREE;
+        }else if (position == 3){
+            return FOUR;
         }
         return super.getItemViewType(position);
+    }
+    private class MyLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Glide.with(context).load((String) path).into(imageView);
+        }
     }
 }

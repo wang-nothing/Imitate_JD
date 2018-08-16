@@ -20,6 +20,7 @@ import com.mjd.imitate_jd.bean.LoginBean;
 import com.mjd.imitate_jd.bean.MobileBean;
 import com.mjd.imitate_jd.mvp.my.login.presenter.Login_Presenter;
 import com.mjd.imitate_jd.mvp.my.reg.view.RegActivity;
+import com.mjd.imitate_jd.utils.UserManage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -105,7 +106,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void viewSuccess(LoginBean loginBean) {
         mMsg = loginBean.getMsg();
+        String uid = loginBean.getData().getUid();
         if ("登录成功".equals(mMsg)) {
+            UserManage.getInstances().saveUserInfo(this,mMobile, mPassword, uid);
             EventBus.getDefault().post(new MobileBean(mMobile));
             finish();
         }else{

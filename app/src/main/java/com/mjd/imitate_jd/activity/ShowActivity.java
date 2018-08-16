@@ -1,9 +1,13 @@
 package com.mjd.imitate_jd.activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.mjd.imitate_jd.R;
@@ -21,7 +25,7 @@ public class ShowActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private FrameLayout fragmelayout;
     private RadioGroup show_group;
     private List<Fragment> mFragments;
-
+    private RadioButton show_group_car;
 
 
     @Override
@@ -40,6 +44,7 @@ public class ShowActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         setContentView(R.layout.activity_show);
         fragmelayout = findViewById(R.id.fragmelayout);
         show_group = findViewById(R.id.show_group);
+        show_group_car = findViewById(R.id.show_group_car);
         mFragments = new ArrayList<>();
         mFragments.add(new Fragment_Home());
         mFragments.add(new Fragment_Class());
@@ -75,5 +80,16 @@ public class ShowActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmelayout, mFragments.get(4)).commit();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        Intent intent = getIntent();
+        int page = intent.getIntExtra("page", 0);
+        if (page==3){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmelayout, mFragments.get(3)).commit();
+            show_group_car.setChecked(true);
+        }
+        super.onResume();
     }
 }

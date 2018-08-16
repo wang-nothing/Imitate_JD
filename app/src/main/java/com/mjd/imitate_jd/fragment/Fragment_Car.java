@@ -8,16 +8,32 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mjd.imitate_jd.R;
+import com.mjd.imitate_jd.base.BaseFragment;
 
 /**
  * Created by admin on 2018-8-7.
  */
 
-public class Fragment_Car extends Fragment {
-    @Nullable
+public class Fragment_Car extends BaseFragment {
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_car, null);
-        return view;
+    protected void initListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void initViews(View view) {
+
+    }
+
+    @Override
+    protected int privideLayoutId() {
+        return R.layout.fragment_car;
     }
 }

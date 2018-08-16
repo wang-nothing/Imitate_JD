@@ -1,6 +1,7 @@
 package com.mjd.imitate_jd.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mjd.imitate_jd.R;
+import com.mjd.imitate_jd.activity.SearchActivity;
 import com.mjd.imitate_jd.bean.HomeBean;
 
 
@@ -79,7 +81,10 @@ class MyGridViewAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"你点击了 "+listData.get(position).getName(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"你点击了 "+listData.get(position).getName(),Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("s", listData.get(position).getName());
+                context.startActivity(intent);
             }
         });
         return convertView;

@@ -1,9 +1,14 @@
 package com.mjd.imitate_jd.mvp.home.presenter;
 
+import com.mjd.imitate_jd.activity.SearchActivity;
 import com.mjd.imitate_jd.bean.HomeBean;
+import com.mjd.imitate_jd.bean.SearchBean;
 import com.mjd.imitate_jd.mvp.home.model.Imodel_home;
+import com.mjd.imitate_jd.mvp.home.model.Imodel_search;
 import com.mjd.imitate_jd.mvp.home.model.Model_Home;
+import com.mjd.imitate_jd.mvp.home.model.Model_Search;
 import com.mjd.imitate_jd.mvp.home.view.Iview_home;
+import com.mjd.imitate_jd.mvp.home.view.Iview_search;
 
 /**
  * Created by admin on 2018-8-11.
@@ -26,6 +31,7 @@ public class Presenter_Home implements Ipresenter_home {
             }
         });
     }
+
     @Override
     public void Destroys() {
         if (mIview_home != null){
