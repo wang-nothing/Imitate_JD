@@ -33,10 +33,28 @@ public class TuijiancAdapter extends RecyclerView.Adapter<GridcycHolder> {
     public void onBindViewHolder(GridcycHolder holder, int position) {
         holder.miaosha_item_tv.setText(tuijian.getList().get(position).getTitle());
         holder.miaosha_item_simple.setImageURI(tuijian.getList().get(position).getImages().split("\\|")[0]);
+        final String pid = tuijian.getList().get(position).getPid();
+        final String detailUrl = tuijian.getList().get(position).getDetailUrl();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClickListener.onItemClick(pid,detailUrl);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return tuijian.getList().size();
+    }
+
+    private OnItemClickListener1 mItemClickListener;
+
+    public void setItemClickListener(OnItemClickListener1 itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public interface OnItemClickListener1{
+        void onItemClick(String pid, String detailUrl);
     }
 }

@@ -23,7 +23,8 @@
         <activity android:name=".mvp.my.login.view.LoginActivity" />
         <activity android:name=".mvp.my.reg.view.RegActivity" />
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.DetailsActivity"></activity>
+        <activity android:name=".activity.DetailsActivity" />
+        <activity android:name=".activity.WebActivity"></activity>
     </application>
 
 </manifest>

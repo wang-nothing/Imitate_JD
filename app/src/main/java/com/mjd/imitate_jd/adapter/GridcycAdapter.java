@@ -34,10 +34,28 @@ public class GridcycAdapter extends RecyclerView.Adapter<GridcycHolder> {
     public void onBindViewHolder(GridcycHolder holder, int position) {
         holder.miaosha_item_tv.setText(miaosha.getList().get(position).getTitle());
         holder.miaosha_item_simple.setImageURI(miaosha.getList().get(position).getImages().split("\\|")[0]);
+        final String pid = miaosha.getList().get(position).getPid();
+        final String detailUrl = miaosha.getList().get(position).getDetailUrl();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClickListener.onItemClick(pid, detailUrl);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return miaosha.getList().size();
+    }
+
+    private OnItemClickListener2 mItemClickListener;
+
+    public void setItemClickListener(OnItemClickListener2 itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public interface OnItemClickListener2{
+        void onItemClick(String pid, String detailUrl);
     }
 }

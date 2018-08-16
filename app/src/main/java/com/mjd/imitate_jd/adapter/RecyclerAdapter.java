@@ -1,6 +1,7 @@
 package com.mjd.imitate_jd.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,12 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.mjd.imitate_jd.R;
+import com.mjd.imitate_jd.activity.WebActivity;
 import com.mjd.imitate_jd.bean.HomeBean;
 import com.mjd.imitate_jd.holder.BannerHolder;
 import com.mjd.imitate_jd.holder.ClassHolder;
@@ -176,6 +179,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             GridcycAdapter gridcycAdapter = new GridcycAdapter(miaosha, mContext);
             ((MiaoShaHolder) holder).miaosha_recyclerview.setAdapter(gridcycAdapter);
             ((MiaoShaHolder) holder).miaosha_tv.setText("————————"+mData.getMiaosha().getName()+"————————");
+            gridcycAdapter.setItemClickListener(new GridcycAdapter.OnItemClickListener2() {
+                @Override
+                public void onItemClick(String pid, String detailUrl) {
+                    Intent intent = new Intent(mContext, WebActivity.class);
+                    intent.putExtra("pid", pid);
+                    intent.putExtra("detailUrl", detailUrl);
+                    mContext.startActivity(intent);
+                }
+            });
         }
         else if (holder instanceof TuijianHolder){
             ((TuijianHolder) holder).tuijian_tv.setText("————————"+mData.getTuijian().getName()+"————————");
@@ -183,7 +195,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             HomeBean.DataBean.TuijianBean tuijian = mData.getTuijian();
             TuijiancAdapter tuijiancAdapter = new TuijiancAdapter(tuijian, mContext);
             ((TuijianHolder) holder).tuijian_recyclerview.setAdapter(tuijiancAdapter);
-
+            tuijiancAdapter.setItemClickListener(new TuijiancAdapter.OnItemClickListener1() {
+                @Override
+                public void onItemClick(String pid, String detailUrl) {
+                    Intent intent = new Intent(mContext, WebActivity.class);
+                    intent.putExtra("pid", pid);
+                    intent.putExtra("detailUrl", detailUrl);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 
