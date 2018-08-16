@@ -3,6 +3,7 @@ package com.mjd.imitate_jd.api;
 
 import com.mjd.imitate_jd.bean.AddcarBean;
 import com.mjd.imitate_jd.bean.CarBean;
+import com.mjd.imitate_jd.bean.DeleteBean;
 import com.mjd.imitate_jd.bean.DetailsBean;
 import com.mjd.imitate_jd.bean.HomeBean;
 import com.mjd.imitate_jd.bean.LoginBean;
@@ -51,4 +52,8 @@ public interface Retrofit_Net {
     //查询购物车https://www.zhaoapi.cn/product/getCarts?uid=16906
     @POST("product/getCarts")
     Observable<CarBean> getCar(@Query("uid") String uid);
+
+    //删除https://www.zhaoapi.cn/product/deleteCart?uid=72&pid=1
+    @POST("product/deleteCart")
+    Observable<DeleteBean> getDel(@Query("uid") String uid, @Query("pid") String pid);
 }

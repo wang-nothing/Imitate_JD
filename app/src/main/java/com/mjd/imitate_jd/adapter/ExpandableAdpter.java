@@ -9,12 +9,20 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mjd.imitate_jd.R;
+import com.mjd.imitate_jd.api.RetrofitClient;
 import com.mjd.imitate_jd.bean.CarBean;
+import com.mjd.imitate_jd.bean.DeleteBean;
+import com.mjd.imitate_jd.utils.UserManage;
 
 import java.util.List;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by admin on 2018-8-16.
@@ -159,6 +167,33 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
                     finalChildHolder.tv_commodity_show_num.setText(s1);
                 }
                 notifyDataSetChanged();
+            }
+        });
+        childHolder.child_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String uid = UserManage.getInstances().getUserInfo(mContext).getUid();
+                String pid = mData.get(groupPosition).getList().get(childPosition).getPid();
+                RetrofitClient.getInstance().getCommonApi().getDel(uid, pid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<DeleteBean>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(DeleteBean deleteBean) {
+                                Toast.makeText(mContext,deleteBean.getMsg(),Toast.LENGTH_SHORT).show();
+                                notifyDataSetChanged();
+                            }
+                        });
             }
         });
         return convertView;
