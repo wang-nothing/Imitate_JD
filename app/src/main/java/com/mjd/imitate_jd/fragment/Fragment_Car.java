@@ -12,17 +12,24 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mjd.imitate_jd.R;
 import com.mjd.imitate_jd.adapter.ExpandableAdpter;
+import com.mjd.imitate_jd.api.RetrofitClient;
 import com.mjd.imitate_jd.base.BaseFragment;
 import com.mjd.imitate_jd.bean.CarBean;
+import com.mjd.imitate_jd.bean.DeleteBean;
 import com.mjd.imitate_jd.mvp.car.presenter.Presenter_Car;
 import com.mjd.imitate_jd.mvp.car.view.Iview_car;
 import com.mjd.imitate_jd.mvp.my.login.view.LoginActivity;
 import com.mjd.imitate_jd.utils.UserManage;
 
 import java.util.List;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by admin on 2018-8-7.
@@ -37,6 +44,7 @@ public class Fragment_Car extends BaseFragment implements Iview_car, View.OnClic
     private List<CarBean.DataBean> mData;
     private int b;
     private ExpandableAdpter expandableAdpter;
+    private Presenter_Car mPresenter_car;
 
     @Override
     protected void initListener() {
@@ -46,9 +54,9 @@ public class Fragment_Car extends BaseFragment implements Iview_car, View.OnClic
     @Override
     protected void initData() {
         if (UserManage.getInstances().hasUserInfo(getActivity())) {
-            Presenter_Car presenter_car = new Presenter_Car(this);
+            mPresenter_car = new Presenter_Car(this);
             String uid = UserManage.getInstances().getUserInfo(getActivity()).getUid();
-            presenter_car.getdatacars(uid);
+            mPresenter_car.getdatacars(uid);
         }else{
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
@@ -83,6 +91,32 @@ public class Fragment_Car extends BaseFragment implements Iview_car, View.OnClic
         for (int i = 0; i < count; i++) {
             car_expanable.expandGroup(i);
         }
+        expandableAdpter.setItemClick(new ExpandableAdpter.ItemClick() {
+            @Override
+            public void json(String pid) {
+                final String uid = UserManage.getInstances().getUserInfo(getActivity()).getUid();
+                RetrofitClient.getInstance().getCommonApi().getDel(uid, pid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<DeleteBean>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(DeleteBean deleteBean) {
+                                Toast.makeText(getActivity(),deleteBean.getMsg(),Toast.LENGTH_SHORT).show();
+                                mPresenter_car.getdatacars(uid);
+                            }
+                        });
+            }
+        });
     }
 
     @Override

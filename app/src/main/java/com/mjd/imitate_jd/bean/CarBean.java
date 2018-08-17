@@ -97,7 +97,7 @@ public class CarBean {
             private String createtime;
             private String detailUrl;
             private String images;
-            private double num;
+            private int num;
             private String pid;
             private String price;
             private String pscid;
@@ -138,11 +138,11 @@ public class CarBean {
                 this.images = images;
             }
 
-            public double getNum() {
+            public int getNum() {
                 return num;
             }
 
-            public void setNum(double num) {
+            public void setNum(int num) {
                 this.num = num;
             }
 

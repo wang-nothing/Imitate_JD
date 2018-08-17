@@ -34,6 +34,7 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
     private List<CarBean.DataBean> mData;
     private Callback mCallback;
     private int price, number;
+    private String mPid;
 
     public void setCallback(Callback callback) {
         mCallback = callback;
@@ -128,7 +129,9 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
             childHolder.child_img.setImageURI(mData.get(groupPosition).getList().get(childPosition).getImages().split("\\|")[0]);
             childHolder.child_title.setText(mData.get(groupPosition).getList().get(childPosition).getTitle());
             childHolder.child_price.setText(mData.get(groupPosition).getList().get(childPosition).getBargainPrice()+"");
-            childHolder.child_box.setOnClickListener(new View.OnClickListener() {
+            childHolder.tv_commodity_show_num.setText(mData.get(groupPosition).getList().get(childPosition).getNum()+"");
+        final ChildHolder finalChildHolder1 = childHolder;
+        childHolder.child_box.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int selected = mData.get(groupPosition).getList().get(childPosition).getSelected();
@@ -137,6 +140,13 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
                     }else if (selected == 0){
                         mData.get(groupPosition).getList().get(childPosition).setSelected(1);
                     }
+                   notifyDataSetChanged();
+                    /*if (finalChildHolder1.child_box.isChecked()){
+                        mData.get(groupPosition).getList().get(childPosition).setSelected(1);
+                    }else{
+                        mData.get(groupPosition).getList().get(childPosition).setSelected(0);
+                    }
+                    calculate();*/
                 }
             });
             if (mData.get(groupPosition).getList().get(childPosition).getSelected()==0){
@@ -148,23 +158,22 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
         childHolder.iv_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String s = finalChildHolder.tv_commodity_show_num.getText().toString();
-                    int i = Integer.parseInt(s);
-                    i++;
-                    String s1 = String.valueOf(i);
-                    finalChildHolder.tv_commodity_show_num.setText(s1);
+                    int num = mData.get(groupPosition).getList().get(childPosition).getNum();
+                    num++;
+                    mData.get(groupPosition).getList().get(childPosition).setNum(num);
                     notifyDataSetChanged();
                 }
             });
         childHolder.iv_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = finalChildHolder.tv_commodity_show_num.getText().toString();
-                int i = Integer.parseInt(s);
-                i--;
-                if (i >= 0) {
-                    String s1 = String.valueOf(i);
-                    finalChildHolder.tv_commodity_show_num.setText(s1);
+                int num = mData.get(groupPosition).getList().get(childPosition).getNum();
+                num--;
+                if (num >= 1) {
+                    mData.get(groupPosition).getList().get(childPosition).setNum(num);
+                }else if (num <= 0){
+                    mPid = mData.get(groupPosition).getList().get(childPosition).getPid();
+                    mItemClick.json(mPid);
                 }
                 notifyDataSetChanged();
             }
@@ -172,28 +181,8 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
         childHolder.child_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uid = UserManage.getInstances().getUserInfo(mContext).getUid();
-                String pid = mData.get(groupPosition).getList().get(childPosition).getPid();
-                RetrofitClient.getInstance().getCommonApi().getDel(uid, pid)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<DeleteBean>() {
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(DeleteBean deleteBean) {
-                                Toast.makeText(mContext,deleteBean.getMsg(),Toast.LENGTH_SHORT).show();
-                                notifyDataSetChanged();
-                            }
-                        });
+                mPid = mData.get(groupPosition).getList().get(childPosition).getPid();
+                mItemClick.json(mPid);
             }
         });
         return convertView;
@@ -222,5 +211,14 @@ public class ExpandableAdpter extends BaseExpandableListAdapter {
         super.notifyDataSetChanged();
         calculate();
         mCallback.json(price, number);
+    }
+    private ItemClick mItemClick;
+
+    public void setItemClick(ItemClick itemClick) {
+        mItemClick = itemClick;
+    }
+
+    public interface ItemClick{
+        void json(String pid);
     }
 }
